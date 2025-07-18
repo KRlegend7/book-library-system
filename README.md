@@ -83,7 +83,7 @@ A complete full-stack web application for managing a book library, built with Ja
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/KRlegend7/book-library-system
 cd book-library-system
 ```
 
