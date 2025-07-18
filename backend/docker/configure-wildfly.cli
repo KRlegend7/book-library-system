@@ -1,0 +1,23 @@
+# WildFly CLI script to configure datasource and deploy application
+# This script configures PostgreSQL datasource for the Book Library application
+
+# Connect to the server
+connect
+
+# Add PostgreSQL module
+module add --name=org.postgresql --resources=/opt/jboss/wildfly/standalone/deployments/postgresql-42.7.1.jar --dependencies=javax.api,javax.transaction.api
+
+# Add PostgreSQL driver
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-class-name=org.postgresql.Driver)
+
+# Add datasource
+data-source add --name=BookLibraryDS --jndi-name=java:jboss/datasources/BookLibraryDS --driver-name=postgresql --connection-url=jdbc:postgresql://postgres:5432/book_library --user-name=book_user --password=book_password --validate-on-match=true --background-validation=false --valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker --exception-sorter-class-name=org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter
+
+# Test datasource connection
+/subsystem=datasources/data-source=BookLibraryDS:test-connection-in-pool
+
+# Reload configuration
+:reload
+
+# Disconnect
+quit
